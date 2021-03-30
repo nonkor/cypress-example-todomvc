@@ -1,5 +1,5 @@
 import ToDoPage from './../elements/ToDoPage'
-import { NEW_ITEMS } from './../helpers/toDoArray'
+import { NEW_ITEMS } from '../helpers/toDoArray'
 
 
 describe('To Do spec App', () => {
@@ -70,6 +70,35 @@ describe('To Do spec App', () => {
     .getToDoItemsList()
     .should('have.length', 1)
     .should('contain', 'Completed item')
+  })
+
+  it('clears all completed items', () => {
+    todoPage
+    .addMultipleTodoItemsInLocalStorage(data)
+    .clickClearCompletedBtn()
+    .getToDoItemsList()
+    .should('have.length', 1)
+    .should('contain', 'Active item')
+
+    todoPage
+    .getToDoCount()
+    .should('have.text', '1 item left')
+  })
+
+  it.only('deletes the todo', () => {
+    todoPage
+    .addTodoItemInLocalStorage()
+    .getToDoCount()
+    .should('have.text', '1 item left')
+
+    todoPage
+    .deleteToDoItem()
+    .getToDoItemsList()
+    .should('have.length', 0)
+
+    todoPage
+    .getToDoCount()
+    .should('not.exist')
   })
 })
 

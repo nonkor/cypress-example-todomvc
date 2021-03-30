@@ -92,7 +92,7 @@ describe('TodoMVC - React', () => {
     .should('contain', 'Active item')
   })
 
-  it.only('filters by completed items', () => {
+  it('filters by completed items', () => {
     addMultipleTodoItemsInLocalStorage(
       [
         { id: '1', title: 'Active item', completed: false },
