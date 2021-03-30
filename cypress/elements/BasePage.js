@@ -16,4 +16,18 @@ export default class BasePage {
       expect(obj[i].title).to.eq(NEW_ITEMS[i])
     }
   }
+
+  addTodoItemInLocalStorage (id = '1', title = NEW_ITEMS[0], completed = false) {
+    let data = [{ id, title, completed }]
+
+    localStorage.setItem('react-todos', JSON.stringify(data))
+
+    return this
+  }
+
+  addMultipleTodoItemsInLocalStorage (data) {
+    localStorage.setItem('react-todos', JSON.stringify(data))
+
+    return this
+  }
 }
