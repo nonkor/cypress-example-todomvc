@@ -1,4 +1,6 @@
-export default class ToDoPage {
+import BasePage from './BasePage'
+
+export default class ToDoPage extends BasePage {
   headerLogoLocator = 'h1';
   newToDoItemLocator = '.new-todo';
   toDoItemListLocator = '.todo-list li';
@@ -12,15 +14,13 @@ export default class ToDoPage {
     return cy.get(this.newToDoItemLocator);
   }
 
-  getToDoitemsList() {
+  getToDoItemsList() {
     return cy.get(this.toDoItemListLocator).as('todo');
   }
 
-  getItemsFromLocalStorage () {
-    const getTodosFromLocalStorage = () => {
-      let storage = localStorage.getItem('react-todos')
-
-      return JSON.parse(storage)
-    }
+  addToDoItem(toDoItem) {
+    cy.type(toDoItem).type('{enter}')
+    return this
   }
+
 }

@@ -42,7 +42,7 @@ describe('TodoMVC - React', () => {
     cy.visit('/')
   })
 
-  it.only('shows a form for adding todo items', () => {
+  it('shows a form for adding todo items', () => {
     cy.get('h1').should('contain', 'todos')
     cy.get('.new-todo').should('have.attr', 'placeholder', 'What needs to be done?')
     todoItems().should('have.length', 0)
