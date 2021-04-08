@@ -1,3 +1,5 @@
+import {TodoPage, todoPage} from '../page-objects/todo.page'
+
 describe('TodoMVC - React', () => {
   // items description
   const NEW_ITEMS = [
@@ -6,137 +8,70 @@ describe('TodoMVC - React', () => {
   ]
   const EDITED_ITEM = 'Updated todo'
 
-  // LocalStorage helper methods
-  const getTodosFromLocalStorage = () => {
-    let storage = localStorage.getItem('react-todos')
-
-    return JSON.parse(storage)
-  }
-
-  const checkTodosInLocalStorage = (count) => {
-    let obj = getTodosFromLocalStorage()
-
-    expect(obj.length).to.eq(count)
-    for (let i = 0; i < count; i++) {
-      expect(obj[i].title).to.eq(NEW_ITEMS[i])
-    }
-  }
-
-  const addTodoItemInLocalStorage = (id = '1', title = NEW_ITEMS[0], completed = false) => {
-    let data = [{ id, title, completed }]
-
-    localStorage.setItem('react-todos', JSON.stringify(data))
-  }
-
-  const addMultipleTodoItemsInLocalStorage = (data) => {
-    localStorage.setItem('react-todos', JSON.stringify(data))
-  }
-
-  // elements
-  const todoItems = () => {
-    return cy.get('.todo-list li').as('todo')
-  }
-
   // specs
   beforeEach(function () {
     cy.visit('/')
   })
 
   it('shows a form for adding todo items', () => {
-    cy.get('h1').should('contain', 'todos')
-    cy.get('.new-todo').should('have.attr', 'placeholder', 'What needs to be done?')
-    todoItems().should('have.length', 0)
+    todoPage.header().should('contain', 'todos')
+    todoPage.newTodo().should('have.attr', 'placeholder', 'What needs to be done?')
+    todoPage.todoItems().should('have.length', 0)
   })
 
   it('adds new items', () => {
-    cy.get('.new-todo')
-    .type(NEW_ITEMS[0]).type('{enter}')
-    .type(NEW_ITEMS[1]).type('{enter}')
+  todoPage.addTodos(NEW_ITEMS)
+  todoPage.verifyTodos(NEW_ITEMS)
 
-    todoItems().should('have.length', 2).then(() => {
-      checkTodosInLocalStorage(2)
     })
-  })
+  
 
   it('completes an item', () => {
-    addTodoItemInLocalStorage()
-    cy.get('.toggle[type="checkbox"]').check()
-
-    todoItems().should('have.class', 'completed')
+    todoPage.addTodos('1')
+    todoPage.completeAllTodos()
+    todoPage.todoItems().should('have.class', 'completed')
   })
 
   it('edits an existing todo', () => {
-    addTodoItemInLocalStorage()
-    todoItems()
-    .dblclick()
-    .find('.edit')
-    .clear()
-    .type(EDITED_ITEM)
-    .type('{enter}')
-
-    todoItems()
+    todoPage.addTodoItemsToLocalStorage(1,0)
+    todoPage.editItems(0, EDITED_ITEM)
+    todoPage.todoItems()
     .should('contain', EDITED_ITEM)
   })
 
   it('filters by active items', () => {
-    addMultipleTodoItemsInLocalStorage(
-      [
-        { id: '1', title: 'Active item', completed: false },
-        { id: '2', title: 'Completed item', completed: true },
-      ],
-    )
-
-    cy.contains('a', 'Active').click()
-    todoItems()
+    todoPage.addTodoItemsToLocalStorage(1,1)
+    todoPage.buttonActive().click()
+    todoPage.todoItems()
     .should('have.length', 1)
     .should('contain', 'Active item')
   })
 
   it('filters by completed items', () => {
-    addMultipleTodoItemsInLocalStorage(
-      [
-        { id: '1', title: 'Active item', completed: false },
-        { id: '2', title: 'Completed item', completed: true },
-      ],
-    )
-
-    cy.contains('a', 'Completed').click()
-    todoItems()
+    todoPage.addTodoItemsToLocalStorage(1,1)
+    todoPage.buttonCompleted().click()
+    todoPage.todoItems()
     .should('have.length', 1)
     .should('contain', 'Completed item')
   })
 
   it('clears all completed items', () => {
-    addMultipleTodoItemsInLocalStorage(
-      [
-        { id: '1', title: 'Active item', completed: false },
-        { id: '2', title: 'Completed item', completed: true },
-      ],
-    )
-
-    cy.contains('button', 'Clear completed').click()
-    todoItems()
+    todoPage.addTodoItemsToLocalStorage(1,1)
+    todoPage.buttonClearCompleted().click()
+    todoPage.todoItems()
     .should('have.length', 1)
     .should('contain', 'Active item')
-
-    cy.get('.todo-count')
-    .should('have.text', '1 item left')
+    todoPage.verifyCounter(1)
   })
 
   it('deletes the todo', () => {
-    addTodoItemInLocalStorage()
-
-    cy.get('.todo-count')
-    .should('have.text', '1 item left')
-
-    todoItems()
-    .trigger('mouseover').get('.destroy')
-    .invoke('show').should('be.visible')
-    .click()
-
-    todoItems().should('have.length', 0)
-
-    cy.get('.todo-count')
-    .should('not.exist')
+    todoPage.addTodoItemsToLocalStorage(1,0)
+    todoPage.verifyCounter(1)
+    todoPage.clearElement(0)
+    todoPage.addTodoItemsToLocalStorage(1,0)
+    todoPage.todoItems().should('have.length', 0)
+    todoPage.verifyCounter(null)
   })
+  
 })
+
