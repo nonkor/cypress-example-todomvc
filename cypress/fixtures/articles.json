@@ -1,0 +1,21 @@
+{
+  "articles": [
+    {
+      "title": "TTTTT",
+      "slug": "artigo-2-fr2is0",
+      "body": "Artigo 2 iniciado",
+      "createdAt": "2021-05-27T20:54:04.100Z",
+      "updatedAt": "2021-05-27T20:54:04.100Z",
+      "tagList": [],
+      "description": "TTTTT Desc",
+      "author": {
+        "username": "Thanos77",
+        "bio": null,
+        "image": "https://static.productionready.io/images/smiley-cyrus.jpg",
+        "following": false
+      },
+      "favorited": false,
+      "favoritesCount": 0
+    }
+  ]
+}
