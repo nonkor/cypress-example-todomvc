@@ -1,4 +1,3 @@
 {
-  "fixturesFolder": false,
   "testFiles": ["**/*.{feature,features}", "**/*.spec.js"]
 }
