@@ -34,8 +34,8 @@
   },
   "devDependencies": {
     "axe-core": "3.5.5",
-    "cypress": "6.8.x",
-    "cypress-axe": "0.12.2",
+    "cypress": "7.5.0",
+    "eslint-plugin-cypress-dev": "3.0.0",
     "cypress-cucumber-preprocessor": "4.0.x",
     "eslint": "7.23.x",
     "eslint-plugin-chai-friendly": "0.6.x",
